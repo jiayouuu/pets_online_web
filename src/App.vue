@@ -1,85 +1,52 @@
-<script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-</script>
+<!--
+ * @Author: 桂佳囿
+ * @Date: 2025-01-16 14:32:28
+ * @LastEditors: 桂佳囿
+ * @LastEditTime: 2025-01-18 20:16:13
+ * @Description: 入口组件
+-->
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
-
-  <RouterView />
+  <foot-animation />
+  <div style="font-family:FangYuan;font-weight: 700;font-size: 50px;">测试字体</div>
+  <input-slider />
+  <el-input v-model="nickname">
+  </el-input>
+  <el-button @click="submit">提交</el-button>
 </template>
+<script setup lang="ts">
+import footAnimation from '@/components/foot-animation.vue';
+import InputSlider from './components/input-slider.vue';
+import { addUser } from '@/service/user'
+import {reactive,toRefs} from 'vue'
+import { ElNotification } from 'element-plus'
+const formData= reactive({
+  nickname:''
+})
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+const submit = async () => {
+  const {nickname}=formData
+  const params = {
+    nickname,
+    userId:'dddd'
   }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
+  const {data:{code}} = await addUser(params)
+  if (code === 200) ElNotification({
+    title: '成功',
+    message: '保存成功',
+    duration: 1000,
+  })
+  else {
+    ElNotification({
+    title: '失败',
+    message: '保存失败',
+    duration: 1000,
+  })
   }
 }
+const {nickname} =toRefs(formData)
+
+</script>
+<style scoped lang="scss">
 </style>
