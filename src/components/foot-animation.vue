@@ -2,7 +2,7 @@
  * @Author: 桂佳囿
  * @Date: 2025-01-16 15:27:04
  * @LastEditors: 桂佳囿
- * @LastEditTime: 2025-01-16 16:56:20
+ * @LastEditTime: 2025-01-19 13:48:23
  * @Description: 底部动画组件
 -->
 
@@ -11,9 +11,16 @@
         <div class="background" />
         <div class="bear " />
     </div>
+    <input type="text">
+    <button @click="router.back()">back</button>
+    <button @click="router.push({
+        name:'input-slider'
+    })">go</button>
 </template>
 
 <script setup lang="ts">
+import {useRouter} from 'vue-router'
+const router = useRouter()
 </script>
 <style scoped lang="scss">
 @keyframes bgMove {

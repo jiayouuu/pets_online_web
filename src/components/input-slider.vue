@@ -2,7 +2,7 @@
  * @Author: 桂佳囿
  * @Date: 2025-01-16 17:36:11
  * @LastEditors: 桂佳囿
- * @LastEditTime: 2025-01-17 17:54:27
+ * @LastEditTime: 2025-01-19 13:46:38
  * @Description: 
 -->
 <template>
@@ -14,10 +14,16 @@
             </div>
         </div>
     </div>
+    <input type="text">
+    <button @click="router.back()">back</button>
+    <button @click="router.push({
+        name:'foot-animation'
+    })">go</button>
 </template>
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue'
-
+import {useRouter} from 'vue-router'
+const router = useRouter()
 const iconBox =ref()
 const rangeValue= ref(50)
 watchEffect(()=>{

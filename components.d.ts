@@ -7,6 +7,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AliveRouterView: typeof import('./src/components/alive-router-view.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElInput: typeof import('element-plus/es')['ElInput']
     FootAnimation: typeof import('./src/components/foot-animation.vue')['default']

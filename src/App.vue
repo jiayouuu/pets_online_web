@@ -2,24 +2,24 @@
  * @Author: 桂佳囿
  * @Date: 2025-01-16 14:32:28
  * @LastEditors: 桂佳囿
- * @LastEditTime: 2025-01-18 20:16:13
+ * @LastEditTime: 2025-01-19 13:15:24
  * @Description: 入口组件
 -->
 
 <template>
-  <foot-animation />
+  <!-- <foot-animation />
   <div style="font-family:FangYuan;font-weight: 700;font-size: 50px;">测试字体</div>
-  <input-slider />
+  <input-slider /> -->
   <el-input v-model="nickname">
   </el-input>
   <el-button @click="submit">提交</el-button>
+  <alive-router-view />
 </template>
 <script setup lang="ts">
-import footAnimation from '@/components/foot-animation.vue';
-import InputSlider from './components/input-slider.vue';
 import { addUser } from '@/service/user'
 import {reactive,toRefs} from 'vue'
 import { ElNotification } from 'element-plus'
+import aliveRouterView from './components/alive-router-view.vue'
 const formData= reactive({
   nickname:''
 })
@@ -29,7 +29,6 @@ const submit = async () => {
   const {nickname}=formData
   const params = {
     nickname,
-    userId:'dddd'
   }
   const {data:{code}} = await addUser(params)
   if (code === 200) ElNotification({
