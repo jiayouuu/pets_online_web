@@ -2,7 +2,7 @@
  * @Author: 桂佳囿
  * @Date: 2025-01-18 16:55:06
  * @LastEditors: 桂佳囿
- * @LastEditTime: 2025-01-19 12:26:26
+ * @LastEditTime: 2025-01-22 10:15:12
  * @Description: http实例
  */
 
@@ -10,7 +10,7 @@ import axios from "axios";
 import type { InternalAxiosRequestConfig, AxiosResponse } from "axios";
 
 const http = axios.create({
-  baseURL: "http://127.0.0.1:9000/pets/api/",
+  baseURL: import.meta.env.VITE_BASE_URL,
   timeout: 3000
 });
 
