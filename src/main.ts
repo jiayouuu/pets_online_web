@@ -12,7 +12,10 @@ import router from '@/router'
 import store from '@/stores'
 import '@/assets/styles/main.scss'
 import 'element-plus/dist/index.css'
+import vuetify from '@/plugins/vuetify'
+
 const app = createApp(App)
 app.use(store)
 app.use(router)
+app.use(vuetify)
 app.mount('#app')

@@ -2,7 +2,7 @@
  * @Author: 桂佳囿
  * @Date: 2025-01-18 17:15:47
  * @LastEditors: 桂佳囿
- * @LastEditTime: 2025-01-18 20:48:29
+ * @LastEditTime: 2025-01-22 17:14:32
  * @Description: 用户相关接口
  */
 
@@ -12,10 +12,10 @@ import qs from 'qs'
 import type { User } from '@/types/user'
 
 const USER = {
-  addUser: 'user/add',
+  register: '/user/register',
 }
 
-export const addUser = (params:User): ResponseData<User> => http.post(
-    USER.addUser,
+export const register = (params:User): ResponseData<User> => http.post(
+    USER.register,
     qs.stringify(params)
 )

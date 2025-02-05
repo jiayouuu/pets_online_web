@@ -12,6 +12,7 @@ declare module 'vue' {
     ElInput: typeof import('element-plus/es')['ElInput']
     FootAnimation: typeof import('./src/components/foot-animation.vue')['default']
     InputSlider: typeof import('./src/components/input-slider.vue')['default']
+    NotFound: typeof import('./src/components/not-found.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }
