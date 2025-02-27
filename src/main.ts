@@ -2,7 +2,7 @@
  * @Author: 桂佳囿
  * @Date: 2025-01-16 14:32:28
  * @LastEditors: 桂佳囿
- * @LastEditTime: 2025-01-18 20:22:41
+ * @LastEditTime: 2025-02-21 09:14:55
  * @Description: vue入口文件
  */
 
@@ -12,10 +12,12 @@ import router from '@/router'
 import store from '@/stores'
 import '@/assets/styles/main.scss'
 import 'element-plus/dist/index.css'
-import vuetify from '@/plugins/vuetify'
+import { vuetify } from '@/plugins/vuetify'
+import { i18n } from '@/plugins/i18n'
 
 const app = createApp(App)
 app.use(store)
-app.use(router)
-app.use(vuetify)
-app.mount('#app')
+.use(router)
+.use(vuetify)
+.use(i18n)
+.mount('#app')

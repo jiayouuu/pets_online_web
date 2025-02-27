@@ -11,11 +11,11 @@
         headline="啊偶~ 404"
         title="Page not found"
         text="您冲浪太快，把网页冲到月球上去了"
-        image="https://vuetifyjs.b-cdn.net/docs/images/logos/v.png"
+        :image="logo"
     />
 </template>
+<script setup lang="ts">
+import logo from '@/assets/images/public/logo.png'
+</script>
 <style scoped lang="scss">
-.custom-empty-state {
-    font-family: FangYuan;
-}
 </style>
