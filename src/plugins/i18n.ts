@@ -13,12 +13,12 @@ import zh from '@/assets/locales/zh.json';
 
 // 创建 i18n 实例
 export const i18n = createI18n({
-    // 使用 Composition API 时需要设置为 false
-    legacy: false, 
-    // 设置默认语言
-    locale: import.meta.env.VITE_I18N_LOCALE || 'zh', 
-    messages: {
-        en,
-        zh,
-    },
+  // 使用 Composition API 时需要设置为 false
+  legacy: false, 
+  // 设置默认语言
+  locale: import.meta.env.VITE_I18N_LOCALE || 'zh', 
+  messages: {
+    en,
+    zh,
+  },
 });

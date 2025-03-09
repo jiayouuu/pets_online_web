@@ -99,7 +99,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { getImgCode, verifyImgCode, getEmailCode ,verifyEmailCode,register} from '@/service/user'
+import { getImgCode, verifyImgCode, getEmailCode, verifyEmailCode, register} from '@/service/user'
 
 interface Form {
   email: string
@@ -113,7 +113,7 @@ const valid = ref(false)
 const showPassword = ref(false)
 const countdown = ref(0)
 const captchaImg = ref('')
-const isCaptchaVerified = ref(false)  // 新增状态控制图片/按钮显示
+const isCaptchaVerified = ref(false) // 新增状态控制图片/按钮显示
 
 const form = ref<Form>({
   email: '',
@@ -123,7 +123,7 @@ const form = ref<Form>({
   emailCode: ''
 })
 const emailField = ref()
-const showSnmckbar=ref(false)
+const showSnmckbar = ref(false)
 const goLoginTime = ref(3)
 let imgCodeId = ''
 let emailToken = ''
@@ -150,7 +150,7 @@ const captchaRules = [
   (v: string) => v.length === 5 || '验证码长度为5位',
   async(v: string) => {
     if(isCaptchaVerified.value) return true
-    const { data:{code} } = await verifyImgCode({ code: v, id: imgCodeId })
+    const { data: {code} } = await verifyImgCode({ code: v, id: imgCodeId })
     if (code === 200) {
       isCaptchaVerified.value = true
     }
@@ -168,8 +168,12 @@ const emailCodeRules = [
  * @return {*}
  */
 const refreshCaptcha = async():Promise<void> => {
-  const { data: { data: { id, img } ,code} } = await getImgCode()
-  if(code !== 200) return
+  const { data: { data, code} } = await getImgCode()
+  if(code !== 200) {
+    await new Promise((resolve) => setTimeout(resolve, 3000))
+    refreshCaptcha()
+    return}
+  const { id, img } = data
   captchaImg.value = img
   imgCodeId = id
   form.value.captcha = ''
@@ -182,9 +186,9 @@ const refreshCaptcha = async():Promise<void> => {
  * @return {*}
  */
 const requestEmailCode = async():Promise<void> => {
-  const invalidArr= await emailField.value.validate()
+  const invalidArr = await emailField.value.validate()
   if (invalidArr.length) return
-  const {data:{ code,data }}=await getEmailCode({ email: form.value.email })
+  const {data: { code, data }} = await getEmailCode({ email: form.value.email })
   if (code !== 200) return
   const { token } = data
   emailToken = token
@@ -199,24 +203,23 @@ const requestEmailCode = async():Promise<void> => {
  * @return {*}
  */
 const handleRegister = async():Promise<void> => {
-  console.log("first")
   if (!valid.value) return
   const params = { 
-      email: form.value.email, 
-      code: form.value.emailCode, 
-    }
-  const {data:{data,code}}=await verifyEmailCode(params, emailToken)
+    email: form.value.email, 
+    code: form.value.emailCode, 
+  }
+  const {data: {data, code}} = await verifyEmailCode(params, emailToken)
   if (code !== 200) return
-  const { token } =data
-  const {data:{code: loginCode}}=await register(form.value, token)
-  if (loginCode !== 200)  return
-  showSnmckbar.value=true
-  const timer=setInterval(() => {
-    goLoginTime.value-=1
-    if (goLoginTime.value<=0) {
+  const { token } = data
+  const {data: {code: loginCode}} = await register(form.value, token)
+  if (loginCode !== 200) return
+  showSnmckbar.value = true
+  const timer = setInterval(() => {
+    goLoginTime.value -= 1
+    if (goLoginTime.value <= 0) {
       clearInterval(timer)
-      showSnmckbar.value=false
-      router.push({name:'login'})
+      showSnmckbar.value = false
+      router.push({name: 'login'})
     }
   }, 1000); 
 }
@@ -225,8 +228,8 @@ const handleRegister = async():Promise<void> => {
  * @param {*} void
  * @return {*}
  */
-const goLogin =():void=>{
-  router.push({name:'login'})
+const goLogin = ():void=>{
+  router.push({name: 'login'})
 }
 
 onMounted(() => {

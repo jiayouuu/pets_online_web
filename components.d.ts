@@ -15,5 +15,7 @@ declare module 'vue' {
     NotFound: typeof import('./src/components/not-found.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    UploadF: typeof import('./src/components/upload-f.vue')['default']
+    UploadFile: typeof import('./src/components/upload-file.vue')['default']
   }
 }

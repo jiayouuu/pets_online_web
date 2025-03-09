@@ -2,7 +2,7 @@
  * @Author: 桂佳囿
  * @Date: 2025-01-18 16:55:06
  * @LastEditors: 桂佳囿
- * @LastEditTime: 2025-02-24 00:09:10
+ * @LastEditTime: 2025-03-05 22:45:53
  * @Description: http实例
  */
 
@@ -12,7 +12,7 @@ import { Storage } from '@/utils/storage'
 
 const http = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
-  timeout: 3000,
+  timeout: 10000,
 });
 
 http.interceptors.request.use(
@@ -28,7 +28,7 @@ http.interceptors.request.use(
 
 http.interceptors.response.use(
   (response:AxiosResponse) => {
-    if(response.status && response.status!==200) return Promise.reject(new Error())
+    if(response.status && response.status !== 200) return Promise.reject(new Error())
     return response;
   },
   (error) => {

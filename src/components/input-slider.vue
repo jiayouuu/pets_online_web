@@ -24,11 +24,11 @@
 import { ref, watchEffect } from 'vue'
 import {useRouter} from 'vue-router'
 const router = useRouter()
-const iconBox =ref()
-const rangeValue= ref(50)
+const iconBox = ref()
+const rangeValue = ref(50)
 watchEffect(()=>{
-    iconBox.value?.style.setProperty("--delay",`-${rangeValue.value}s`);
-    iconBox.value?.style.setProperty("--mouth-up-delay",`-${rangeValue.value}s`);
+  iconBox.value?.style.setProperty("--delay", `-${rangeValue.value}s`);
+  iconBox.value?.style.setProperty("--mouth-up-delay", `-${rangeValue.value}s`);
 })
 
 </script>
