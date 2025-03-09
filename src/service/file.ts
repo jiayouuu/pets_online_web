@@ -2,7 +2,7 @@
  * @Author: 桂佳囿
  * @Date: 2025-03-06 20:55:33
  * @LastEditors: 桂佳囿
- * @LastEditTime: 2025-03-09 01:00:11
+ * @LastEditTime: 2025-03-09 19:33:22
  * @Description: 
  */
 
@@ -12,13 +12,14 @@ import pLimit from 'p-limit';
 import { Storage } from '@/utils/storage'
 import CryptoJS from 'crypto-js';
 import type { UploadFileParams } from '@/types/public';
+import {WebSocketService} from '@/service/websocket'
 
 export class FileUpload {
   private chunkSize:number = 1024 * 1024 * 5;
   private apiUrl:string = `${import.meta.env.VITE_BASE_URL}/files/upload/chunk`;
   private maxConcurrent:number = 5;
   private maxRetries:number = 2;
-  private requestDelay:number = 500;
+  private requestDelay:number = 300;
 
   private fileId:string;
   private file: File;
@@ -26,6 +27,7 @@ export class FileUpload {
   private fileName:string;
   private controller: AbortController;
   private uploadedChunks:number;
+  private wsService: WebSocketService;
   private callback:(process:number)=>void;
   constructor(file: File, callback:(process:number)=>void) {
     this.file = file;
@@ -35,6 +37,7 @@ export class FileUpload {
     this.totalChunks = Math.ceil(file.size / this.chunkSize);
     this.controller = new AbortController();
     this.callback = callback;
+    this.wsService = new WebSocketService();
   }
 
   public async uploadFile():Promise<string> {
@@ -53,12 +56,25 @@ export class FileUpload {
           return this.uploadChunk(hash, chunk, i);
         });
       }
-      const limit = pLimit(this.maxConcurrent);
-      const limitedTasks = chunkTasks.map(task=>limit(task));
       try {
-        const resArr = await Promise.all(limitedTasks);
-        const fileName = resArr.find(item=>item);
-        resolve(fileName!);
+        const stompClient = await this.wsService.connect();
+
+        // 订阅上传进度
+        stompClient.subscribe(`/topic/upload-progress/${this.fileId}`, (message) => {
+          const progress = parseInt(message.body, 10);
+          this.callback(progress)
+        });
+
+        // 订阅上传完成
+        stompClient.subscribe(`/topic/upload-complete/${this.fileId}`, (message) => {
+          const fileName = message.body;
+          console.log(`文件上传完成: ${fileName}`);
+          resolve(fileName); // 解析最终文件名
+          this.wsService.disconnect(); // 完成后断开 WebSocket
+        });
+        const limit = pLimit(this.maxConcurrent);
+        const limitedTasks = chunkTasks.map(task=>limit(task));
+        await Promise.all(limitedTasks);
       } catch (error) {
         if(axios.isCancel(error)) {
           reject(error);
@@ -71,7 +87,7 @@ export class FileUpload {
   }
 
 
-  private async uploadChunk(hash:string, chunk: Blob, chunkIndex: number, retryCount:number = 0):Promise<string | undefined> {
+  private async uploadChunk(hash:string, chunk: Blob, chunkIndex: number, retryCount:number = 0):Promise<void> {
     const params:UploadFileParams = {
       hash,
       chunk,
@@ -89,11 +105,11 @@ export class FileUpload {
     const token = Storage.getItem('token');
     if(token) config.headers!['Authorization'] = `Bearer ${token}`;
     try {
-      const {data: {data, code }} = await axios.post(this.apiUrl, params, config);
+      const {data: {code, data}} = await axios.post(this.apiUrl, params, config);
+      if(code !== 200) console.error(data)
       if(code !== 200) throw new Error('Upload failed');
       this.uploadedChunks++;
-      this.updateProgress();
-      return data?.fileName;
+
     }catch(error) {
       if(axios.isCancel(error)) throw error
       else if(retryCount < this.maxRetries) {
@@ -107,10 +123,6 @@ export class FileUpload {
     this.controller.abort();
   }
 
-  private updateProgress():void {
-    const process = Math.round((this.uploadedChunks / this.totalChunks) * 100);
-    this.callback(process);
-  }
   private calculateHash(file: File): Promise<string> {
     return new Promise((resolve, reject) => {
       const chunkSize = 2 * 1024 * 1024; // 每片2MB

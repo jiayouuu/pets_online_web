@@ -2,7 +2,7 @@
  * @Author: 桂佳囿
  * @Date: 2025-01-16 14:32:28
  * @LastEditors: 桂佳囿
- * @LastEditTime: 2025-01-19 12:43:38
+ * @LastEditTime: 2025-03-09 15:38:42
  * @Description: 
  */
 import { fileURLToPath, URL } from 'node:url'
@@ -38,6 +38,9 @@ export default defineConfig(({ mode })=>{
         autoImport: true,
       }),
     ],
+    define: {
+      global: 'globalThis', // 定义 global 为 globalThis
+    },
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url))
