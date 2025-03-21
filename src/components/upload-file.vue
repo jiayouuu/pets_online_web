@@ -2,7 +2,7 @@
  * @Author: 桂佳囿
  * @Date: 2025-03-04 23:52:55
  * @LastEditors: 桂佳囿
- * @LastEditTime: 2025-03-09 00:55:24
+ * @LastEditTime: 2025-03-15 00:52:17
  * @Description: 
 -->
 <template>
@@ -25,14 +25,15 @@ const fileName = ref<string>()
 const imgPath = computed<string>(()=>{
   return `http://localhost:9000/pets/api/files/download/${fileName.value}`
 })
-const onFileChange = (event: { target: { files: (File | null)[]; }; }) => {
-  const selectedFile = event.target.files[0];
+const onFileChange = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  const selectedFile = target.files?.[0];
   if(!selectedFile) return;
   const fileUpload = new FileUpload(selectedFile, (p)=>process.value = p);
-  fileUpload.uploadFile().then((file:string)=>{
+  fileUpload.upload().then((file:string)=>{
     fileName.value = file
   })
-  // fileUpload.cancelUpload()
+  // fileUpload.cancel()
 };
 </script>
 

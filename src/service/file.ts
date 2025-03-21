@@ -2,10 +2,9 @@
  * @Author: 桂佳囿
  * @Date: 2025-03-06 20:55:33
  * @LastEditors: 桂佳囿
- * @LastEditTime: 2025-03-09 19:33:22
+ * @LastEditTime: 2025-03-15 00:51:58
  * @Description: 
  */
-
 import { nanoid } from 'nanoid';
 import axios, { type AxiosRequestConfig } from 'axios';
 import pLimit from 'p-limit';
@@ -29,6 +28,7 @@ export class FileUpload {
   private uploadedChunks:number;
   private wsService: WebSocketService;
   private callback:(process:number)=>void;
+  
   constructor(file: File, callback:(process:number)=>void) {
     this.file = file;
     this.fileName = file.name;
@@ -40,7 +40,7 @@ export class FileUpload {
     this.wsService = new WebSocketService();
   }
 
-  public async uploadFile():Promise<string> {
+  public async upload():Promise<string> {
     return new Promise(async(resolve, reject)=>{
       const hash = await this.calculateHash(this.file);
       const chunkTasks = [];
@@ -64,7 +64,6 @@ export class FileUpload {
           const progress = parseInt(message.body, 10);
           this.callback(progress)
         });
-
         // 订阅上传完成
         stompClient.subscribe(`/topic/upload-complete/${this.fileId}`, (message) => {
           const fileName = message.body;
@@ -79,7 +78,7 @@ export class FileUpload {
         if(axios.isCancel(error)) {
           reject(error);
         }else{
-          this.cancelUpload();
+          this.cancel();
           reject(error);
         }
       }
@@ -119,7 +118,7 @@ export class FileUpload {
     }
   }
 
-  public cancelUpload():void {
+  public cancel():void {
     this.controller.abort();
   }
 

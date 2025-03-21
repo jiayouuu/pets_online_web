@@ -2,7 +2,7 @@
  * @Author: 桂佳囿
  * @Date: 2025-01-18 16:55:06
  * @LastEditors: 桂佳囿
- * @LastEditTime: 2025-03-05 22:45:53
+ * @LastEditTime: 2025-03-19 23:18:34
  * @Description: http实例
  */
 
@@ -18,7 +18,7 @@ const http = axios.create({
 http.interceptors.request.use(
   (config: InternalAxiosRequestConfig ) => {
     const token = Storage.getItem('token');
-    if (token) config.headers!.Authorization = `Bearer ${token}`;
+    if (token && !config.headers.Authorization) config.headers!.Authorization = `Bearer ${token}`;
     return config;
   },
   (error) => {

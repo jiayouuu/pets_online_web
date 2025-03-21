@@ -19,7 +19,7 @@
     "element-plus": "^2.9.3",
     "lodash": "^4.17.21",
     "nanoid": "^5.1.2",
-    "openai": "^4.85.2",
+    "openai": "^4.87.3",
     "p-limit": "^6.2.0",
     "pinia": "^2.3.0",
     "sockjs-client": "^1.6.1",
