@@ -9,10 +9,14 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AliveRouterView: typeof import('./src/components/alive-router-view.vue')['default']
+    AppFooter: typeof import('./src/components/app-footer.vue')['default']
+    AppHeader: typeof import('./src/components/app-header.vue')['default']
     FootAnimation: typeof import('./src/components/foot-animation.vue')['default']
     InputSlider: typeof import('./src/components/input-slider.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     UploadFile: typeof import('./src/components/upload-file.vue')['default']
+    UserLogin: typeof import('./src/components/user-login.vue')['default']
+    UserRegister: typeof import('./src/components/user-register.vue')['default']
   }
 }

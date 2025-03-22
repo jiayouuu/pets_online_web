@@ -1,0 +1,45 @@
+<!--
+ * @Author: 桂佳囿
+ * @Date: 2025-03-22 17:47:35
+ * @LastEditors: 桂佳囿
+ * @LastEditTime: 2025-03-22 18:08:25
+ * @Description: 
+-->
+# Frontend Development Guidelines for Vue3, Setup Syntax, and Vuetify
+
+# Language and Syntax
+- Utilize TypeScript across all development sectors for type safety and improved maintainability.
+- Leverage Vue 3's setup syntax to organize component logic intuitively.
+- Prefer arrow functions for cleaner and more concise code wherever applicable.
+- Implement async/await for managing asynchronous processes to enhance readability and error handling.
+
+# Components Naming and Structure
+- Use kebab-case for naming Vue component files and directories (e.g., `example-component.vue`).
+- Adhere to PascalCase inside templates for component names.
+
+# Styling with SCSS
+- Keep SCSS simple and efficient; use variables and mixins to abstract repeated styles.
+- Ensure styles are scoped to components to prevent CSS conflict and leakage.
+- Emphasize modular SCSS to streamline and manage complex styling efficiently.
+
+# Libraries and Frameworks
+- Use Vuetify for UI elements to capitalize on a consistent design framework.
+- Follow Vuetify's guidelines to ensure alignment with its component structure and theme management.
+
+# Documentation and Comments
+- Write necessary inline and block comments to clarify component logic and any complex asynchronous processes.
+- Employ JSDoc annotations to document functions and complex code segments thoroughly.
+
+# Image Placeholders
+- When using placeholder images, use links to freely-available images from resources such as Unsplash or Pexels.
+
+# Performance Optimization
+- Import only the required Vuetify components to minimize application load and improve performance.
+- Utilize lazy loading for route and component importation to optimize initial loading times.
+
+# Advanced Practices
+- Maintain a clean and consistent coding style using linters like ESLint for automated issue detection.
+- Implement comprehensive error-handling practices using try-catch blocks for async operations.
+
+# Miscellaneous
+- Utilize modern JavaScript practices to optimize and ensure consistency across the codebase.

@@ -2,9 +2,12 @@
  * @Author: 桂佳囿
  * @Date: 2025-02-27 23:17:43
  * @LastEditors: 桂佳囿
- * @LastEditTime: 2025-03-05 12:11:43
- * @Description: 
+ * @LastEditTime: 2025-03-22 21:41:16
+ * @Description:
  */
+import type { TokenInfo } from '@/types/public'
+import { emitter } from '@/utils/mitt'
+
 export class Storage {
   /**
      * @description: 从sessionStorage或者localStorage中获取数据
@@ -26,6 +29,7 @@ export class Storage {
     this.removeItem(key);
     if (!isLongTime) return sessionStorage.setItem(key, value);
     localStorage.setItem(key, value);
+    emitter.emit('storage', key)
   }
 
   /**
@@ -36,6 +40,7 @@ export class Storage {
   public static removeItem(key: string): void {
     sessionStorage.removeItem(key);
     localStorage.removeItem(key);
+    emitter.emit('storage', key)
   }
 
   /**
@@ -45,16 +50,22 @@ export class Storage {
   public static clear():void {
     sessionStorage.clear();
     localStorage.clear();
+    emitter.emit('storage', 'clear')
   }
 
-  public static parseJWT() {
+  public static parseJWT():TokenInfo | null {
     const token = this.getItem('token');
-    if (!token) return;
+    if (!token) return null;
     const base64Url = token.split('.')[1];
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(atob(base64).split('').map((c)=> 
+    const jsonPayload = decodeURIComponent(atob(base64).split('').map((c)=>
       ('%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
     ).join(''));
-    return JSON.parse(jsonPayload);
+    const tokenInfo = JSON.parse(jsonPayload) as TokenInfo;
+    if(tokenInfo.exp < Date.now() / 1000) {
+      this.removeItem('token');
+      return null;
+    }
+    return tokenInfo;
   }
 }
