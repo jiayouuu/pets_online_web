@@ -2,7 +2,7 @@
  * @Author: 桂佳囿
  * @Date: 2025-02-27 23:17:43
  * @LastEditors: 桂佳囿
- * @LastEditTime: 2025-03-22 21:41:16
+ * @LastEditTime: 2025-03-23 01:06:38
  * @Description:
  */
 import type { TokenInfo } from '@/types/public'
@@ -27,8 +27,8 @@ export class Storage {
      */
   public static setItem(key: string, value: string, isLongTime:boolean = true): void {
     this.removeItem(key);
-    if (!isLongTime) return sessionStorage.setItem(key, value);
-    localStorage.setItem(key, value);
+    if (!isLongTime) sessionStorage.setItem(key, value);
+    else localStorage.setItem(key, value);
     emitter.emit('storage', key)
   }
 
